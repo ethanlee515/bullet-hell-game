@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Hero.h"
 #include "GameFramework/GameModeBase.h"
 #include "BulletHellGameMode.generated.h"
 
@@ -13,6 +14,8 @@ class ABulletHellGameMode : public AGameModeBase
 
 public:
 	ABulletHellGameMode();
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		AHero* getHero();
 };
 
 
