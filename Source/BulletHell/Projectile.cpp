@@ -15,13 +15,30 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	FVector loc = GetActorLocation();
+	posFn = [loc](float t) {
+		return loc;
+	};
 }
 
 // Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	t += DeltaTime;
+	SetActorLocation(posFn(t));
+}
 
+void AProjectile::SetLinearVelocity(float vx, float vy)
+{
+	FVector loc = GetActorLocation();
+	posFn = [loc, vx, vy](float t) {
+		return loc + FVector(vx, vy, 0) * t;
+	};
+}
+
+void AProjectile::SetPosFn(TFunction<FVector(float)> inPosFn)
+{
+	posFn = inPosFn;
 }
 

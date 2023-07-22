@@ -54,7 +54,7 @@ void AHero::Tick(float DeltaTime)
 		}
 	}
 	// Check if attacked
-	FCollisionShape hitbox = FCollisionShape::MakeSphere(50);
+	FCollisionShape hitbox = FCollisionShape::MakeSphere(1);
 	bool attacked = world->OverlapAnyTestByChannel(GetActorLocation(), FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2, hitbox);
 	
 	if (attacked && iframe.IsEmpty()) {

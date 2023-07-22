@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Projectile.generated.h"
+#include "Enemy.generated.h"
 
 UCLASS()
-class BULLETHELL_API AProjectile : public AActor
+class BULLETHELL_API AEnemy : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AProjectile();
+	AEnemy();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,9 +22,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SetLinearVelocity(float vx, float vy);
-	void SetPosFn(TFunction<FVector(float)> inPosFn);
-private:
-	TFunction<FVector(float)> posFn;
-	float t = 0;
+
 };
