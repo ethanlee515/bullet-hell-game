@@ -26,7 +26,7 @@ void AHero::Tick(float DeltaTime)
 	UWorld* world = GetWorld();
 	APlayerController* controller = UGameplayStatics::GetPlayerController(world, 0);
 	FHitResult hit;
-	bool hasHit = controller->GetHitResultUnderCursor(ECollisionChannel::ECC_WorldStatic, true, hit);
+	bool hasHit = controller->GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel1, true, hit);
 	if (hasHit) {
 		FVector target = hit.Location;
 		FVector loc = GetActorLocation();
