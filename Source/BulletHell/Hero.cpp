@@ -3,6 +3,7 @@
 
 #include "Hero.h"
 #include "Kismet/GameplayStatics.h"
+#include "Math/Quat.h"
 
 // Sets default values
 AHero::AHero()
@@ -16,13 +17,26 @@ AHero::AHero()
 void AHero::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	// update iframe
+	if (iframe.GetType() == EVariantTypes::Float) {
+		float v = iframe.GetValue<float>();
+		v -= DeltaTime;
+		if (v < 0) {
+			// TODO Update UI
+			iframe.Empty();
+		}
+		else {
+			iframe = v;
+		}
+	}
+
+	// Follow cursor
 	UWorld* world = GetWorld();
 	APlayerController* controller = UGameplayStatics::GetPlayerController(world, 0);
 	FHitResult hit;
@@ -38,6 +52,15 @@ void AHero::Tick(float DeltaTime)
 		else {
 			SetActorLocation(loc + diff * dx);
 		}
+	}
+	// Check if attacked
+	FCollisionShape hitbox = FCollisionShape::MakeSphere(50);
+	bool attacked = world->OverlapAnyTestByChannel(GetActorLocation(), FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel2, hitbox);
+	
+	if (attacked && iframe.IsEmpty()) {
+		// TODO Update UI
+		health--;
+		iframe = 1.0f;
 	}
 }
 

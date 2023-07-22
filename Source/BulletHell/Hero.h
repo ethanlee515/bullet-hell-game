@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Misc/Variant.h"
 #include "Hero.generated.h"
 
 UCLASS()
@@ -31,4 +32,5 @@ public:
 private:
 	virtual float GetSpeed();
 	int health = 3;
+	FVariant iframe;
 };
