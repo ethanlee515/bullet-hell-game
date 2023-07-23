@@ -21,5 +21,7 @@ public:
 		TSubclassOf<AProjectile> getProjectileType();
 private:
 	float cooldown = 0;
+	float cooldownFront = 0;
+	int eyeRotation = 0;
 	int n = 0;
 };
