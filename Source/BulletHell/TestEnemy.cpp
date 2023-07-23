@@ -19,9 +19,10 @@ void ATestEnemy::Tick(float DeltaTime)
 			AProjectile* p = world->SpawnActor<AProjectile>(projectileType.Get(), GetActorLocation(), FRotator());
 
 			FVector loc = GetActorLocation();
+			loc.X -= 100;
 			int temp = n;
 			TFunction<FVector(float)> posFn = [loc, temp, i](float t) {
-				float theta = PI * i / 16 + ((temp % 2) == 0 ? 1 : -1) * FMath::Sqrt(t);
+				float theta = 3 * PI / 2 + PI * (i - 3.5) / 16 + ((temp % 2) == 0 ? 1 : -1) * FMath::Sqrt(t / 20);
 				float dist = 100 * t;
 				return loc + FVector(dist * FMath::Sin(theta), dist * FMath::Cos(theta), 0);
 			};
@@ -36,6 +37,8 @@ void ATestEnemy::Tick(float DeltaTime)
 		AProjectile* p = world->SpawnActor<AProjectile>(projectileType.Get(), GetActorLocation(), FRotator());
 
 		FVector loc = GetActorLocation();
+		loc.X += 100;
+		loc.Y += 10;
 		eyeRotation ++;
 		if (eyeRotation >= 16)
 		{
@@ -56,7 +59,7 @@ void ATestEnemy::Tick(float DeltaTime)
 		};
 		p->SetPosFn(posFn);
 
-
+		loc.Y -= 20;
 		AProjectile* pTwo = world->SpawnActor<AProjectile>(projectileType.Get(), GetActorLocation(), FRotator());
 		theta += PI / 4;
 		TFunction<FVector(float)> posFnTwo = [loc, theta](float t) {
