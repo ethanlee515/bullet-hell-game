@@ -9,21 +9,25 @@ void ATestEnemy::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	cooldown -= DeltaTime;
 	cooldownFront -= DeltaTime;
+	FRotator rot = GetActorRotation();
 	if (cooldown < 0) {
 		UWorld* world = GetWorld();
 		check(world);
-		cooldown = 2;
+		cooldown = 0.7;
 		n++;
 		for (int i = 0; i < 8; ++i) {
 			TSubclassOf<AProjectile> projectileType = getProjectileType();
 			AProjectile* p = world->SpawnActor<AProjectile>(projectileType.Get(), GetActorLocation(), FRotator());
 
 			FVector loc = GetActorLocation();
-			loc.X -= 100;
+			FVector offset(-100, 0, 0);
+			offset = rot.RotateVector(offset);
+			loc = loc + offset;
 			int temp = n;
-			TFunction<FVector(float)> posFn = [loc, temp, i](float t) {
-				float theta = 3 * PI / 2 + PI * (i - 3.5) / 16 + ((temp % 2) == 0 ? 1 : -1) * FMath::Sqrt(t / 20);
-				float dist = 100 * t;
+			float yaw = - rot.Yaw * 2 * PI / 360;
+			TFunction<FVector(float)> posFn = [loc, temp, i, yaw](float t) {
+				float theta = yaw + 3 * PI / 2 + PI * (i - 3.5) / 16 + ((temp % 2) == 0 ? 1 : -1) * FMath::Sqrt(t);
+				float dist = 400 * t;
 				return loc + FVector(dist * FMath::Sin(theta), dist * FMath::Cos(theta), 0);
 			};
 			p->SetPosFn(posFn);
@@ -37,14 +41,15 @@ void ATestEnemy::Tick(float DeltaTime)
 		AProjectile* p = world->SpawnActor<AProjectile>(projectileType.Get(), GetActorLocation(), FRotator());
 
 		FVector loc = GetActorLocation();
-		loc.X += 100;
-		loc.Y += 10;
+		FVector offset(100, 10, 0);
+		offset = rot.RotateVector(offset);
+		loc = loc + offset;
 		eyeRotation ++;
 		if (eyeRotation >= 16)
 		{
 			eyeRotation = 0;
 		}
-		float theta = PI / 4;
+		float theta = -rot.Yaw * 2*PI/360 + PI / 4;
 		if (eyeRotation < 8)
 		{
 			theta += eyeRotation * PI / 32;
@@ -54,16 +59,19 @@ void ATestEnemy::Tick(float DeltaTime)
 			theta += (16 - eyeRotation) * PI / 32;
 		}
 		TFunction<FVector(float)> posFn = [loc, theta](float t) {
-			float dist = 100 * t;
+			float dist = 300 * t;
 			return loc + FVector(dist * FMath::Sin(theta), dist * FMath::Cos(theta), 0);
 		};
 		p->SetPosFn(posFn);
 
-		loc.Y -= 20;
+		loc = GetActorLocation();
+		offset = FVector(100, -10, 0);
+		offset = rot.RotateVector(offset);
+		loc = loc + offset;
 		AProjectile* pTwo = world->SpawnActor<AProjectile>(projectileType.Get(), GetActorLocation(), FRotator());
 		theta += PI / 4;
 		TFunction<FVector(float)> posFnTwo = [loc, theta](float t) {
-			float dist = 100 * t;
+			float dist = 300 * t;
 			return loc + FVector(dist * FMath::Sin(theta), dist * FMath::Cos(theta), 0);
 		};
 		pTwo->SetPosFn(posFnTwo);
